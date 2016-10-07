@@ -1,0 +1,59 @@
+
+plugins {
+  id "com.jfrog.bintray" version "1.7"
+}
+
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+
+group = 'com.halkow.emote'
+version = '0.0.0'
+
+
+dependencies {
+  compile 'org.codehaus.groovy:groovy-all:2.4.7'
+  compile 'com.halkow.emote:emote-schema:0.0.0'
+}
+
+
+repositories {
+  jcenter()
+  maven {
+    url 'http://dl.bintray.com/hendrikhalkow/maven'
+  }
+}
+
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+}
+
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  publications = ['mavenJava']
+  dryRun = false
+  publish = true
+
+  pkg {
+    repo = 'maven'
+    name = 'emote-api'
+    desc = 'Emote API'
+    websiteUrl = 'https://github.com/hendrikhalkow/emote-api'
+    issueTrackerUrl = 'https://github.com/hendrikhalkow/emote-api/issues'
+    vcsUrl = 'https://github.com/hendrikhalkow/emote-api.git'
+    licenses = ['GPL-3.0']
+    publicDownloadNumbers = true
+    version {
+      name = project.version //Bintray logical version name
+      desc = 'optional, version-specific description'
+    }
+  }
+}
